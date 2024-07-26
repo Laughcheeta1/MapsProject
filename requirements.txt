@@ -1,0 +1,10 @@
+pydot
+IPython
+numpy
+pandas
+geopandas
+shapely
+matplotlib
+plotly_express
+networkx
+osmnx
