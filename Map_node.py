@@ -6,7 +6,6 @@ class Node:
     cost: the cost of getting to this node
     parent: the previous node
     """
-
     def __init__(self, code: int, state: dict[str, float], heuristic: float, cost: float = 0, parent: 'Node' = None):
         self._code = code
         self._state = state

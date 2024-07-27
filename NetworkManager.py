@@ -1,8 +1,9 @@
 import networkx
+import osmnx.distance as osd
 
 
 """
-We create this manager app to do all the important operations with the networkx library.
+We create this manager app to do all the important operations with the networkx and osmnx libraries.
 So basically, to follow SOLID principles
 """
 
@@ -23,8 +24,23 @@ class Manager:
     """
     Returns the distance of the edge between two nodes
     """
-    def get_node_distance(self, node1: int, node2: int) -> float:
-        pass
+    def get_edge_distance(self, node1: int, node2: int) -> float:
+        return self._map.edges[node1, node2, 0]["length"]
 
-    def get_neighbours(self, code):
-        self._map.neighbors(code)
+    """
+    Returns an iterable to the node's neighbours
+    """
+    def get_neighbours(self, code: int):
+        return self._map.neighbors(code)
+
+    """
+    Get the code for the nearest node in the graph to the specified coordinates
+    """
+    def get_code(self, initial_state: dict[str, float]) -> int:
+        return osd.nearest_nodes(self._map, initial_state["x"], initial_state["y"])
+
+    """
+    Returns the great circle distance between two coordinates
+    """
+    def get_circle_distance(self, x1, y1, x2, y2):
+        return osd.great_circle(x1, y1, x2, y2)
