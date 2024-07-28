@@ -9,7 +9,7 @@ class Map:
                  goal_state: dict[str, float],
                  desired_map: networkx.MultiDiGraph
                  ):
-        self.visited_print: dict[int, dict[int, float]] = dict()
+        self.visited_print: set[int] = set()
 
         self._manager = Manager(desired_map)
 
@@ -58,20 +58,13 @@ class Map:
     """
     def search_path(self) -> bool:
         current_node = None
-        print("entered")
         counter = 1
         while not self._is_goal(current_node) and len(self._frontier) != 0:
             current_node = self._get_next_node()
-            
-            print(f"Current node: {current_node.get_code()}")
-
             self._visited.add(current_node.get_code())
             self._add_children(current_node)
 
-            self.visited_print[current_node.get_code()] = {
-                counter,
-                current_node.get_f()
-            }
+            self.visited_print.add(current_node.get_code())
             counter += 1
 
         print(counter)
