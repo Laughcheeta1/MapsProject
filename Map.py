@@ -12,19 +12,29 @@ class Map:
                  ):
         self._manager = Manager(desired_map)
 
-        # Get the node code for the initial_state:
+        self._map = desired_map
 
+        """
+        Since the coordinates of the nearest node to the goal state and the goal state 
+        are not necessarily the same, we have to work with the coordinates (therefore code) of the
+        nearest node to the goal state
+        """
+
+        # Get the code of the goal state node
+        self._goal_state_code = self._manager.get_code(goal_state)
+        # Get the coordinates of the goal state node
+        self._goal_state_coordinates = self._manager.get_coordinates(self._goal_state_code)
         self._root = Node(
             code=self._manager.get_code(initial_state),
             state=initial_state,
             heuristic=self._calculate_heuristic(initial_state)
         )
 
-        self._goal_state = goal_state
-        self._map = desired_map
-
+        # Create the priority queue
         self._next = queue.PriorityQueue()
+        self._next.put((1, self._root))
 
+        # The variables where we will input the solutions
         self._solution = None
         self._final_node = None
 
@@ -40,11 +50,15 @@ class Map:
     returns True if it found a path, else, False
     """
     def search_path(self) -> bool:
-        current_node = self._root
+        current_node = None
+
+        counter = 0  # TODO delete this
 
         while not self._is_goal(current_node) and not self._next.empty():
+            print(f"Number {counter}, node: {current_node}")
+            current_node = self._next.get()[1]
             self._add_children(current_node)
-            current_node = self._next.get()
+
 
         if self._is_goal(current_node):
             self._final_node = current_node
@@ -72,32 +86,46 @@ class Map:
                         )
 
             if not self._repeated_state(new_node):
-                self._next.put(new_node)
+                self._next.put((new_node.get_f(), new_node))
 
     def _is_goal(self, node: Node) -> bool:
-        return node.get_state() == self._goal_state
+        if not node:  # Node is null
+            return False  # TODO optimize this
+
+        return node.get_code() == self._goal_state_code
 
     def _calculate_heuristic(self, state: dict[str, float]) -> float:
         # TODO: Implement a more complex heuristic
-        return self._manager.get_circle_distance(state["x"], state["y"], self._goal_state["x"], self._goal_state["y"])
+        return self._manager.get_circle_distance(
+            state["x"],
+            state["y"],
+            self._goal_state_coordinates["x"],
+            self._goal_state_coordinates["y"]
+        )
 
     def _calculate_cost(self, parent: Node, distance_traveled: float) -> float:
         # TODO: Implement a more complex calculation
         return parent.get_cost() + distance_traveled
 
     def _repeated_state(self, node: Node) -> bool:
-        n = node
+        n = node.get_parent()
         while n is not None and n.get_state() != node.get_state():
             n = n.get_parent()
 
         return n is not None
 
+    """
+    Returns the list of the nodes (nodes represented in just the codes, to be able to graph_it)
+    """
     def _path_objective(self) -> None:
-        n = self._final_node
+        n: Node = self._final_node
 
         result = list()
         while n is not None:
-            result.append(n)
-            n = n.parent
+            result.insert(0, n.get_code())
+            n = n.get_parent()
 
         self._solution = result
+
+    def _get_next_node(self):
+        pass  # TODO

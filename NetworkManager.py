@@ -36,11 +36,11 @@ class Manager:
     """
     Get the code for the nearest node in the graph to the specified coordinates
     """
-    def get_code(self, initial_state: dict[str, float]) -> int:
-        return osd.nearest_nodes(self._map, initial_state["x"], initial_state["y"])
+    def get_code(self, coordinates: dict[str, float]) -> int:
+        return osd.nearest_nodes(self._map, X=coordinates["x"], Y=coordinates["y"])
 
     """
     Returns the great circle distance between two coordinates
     """
     def get_circle_distance(self, x1, y1, x2, y2):
-        return osd.great_circle(x1, y1, x2, y2)
+        return osd.euclidean(x1, y1, x2, y2)

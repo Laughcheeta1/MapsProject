@@ -29,7 +29,7 @@ class Node:
         return self._state
 
     def get_f(self) -> float:
-        return self._heuristic + self._cost
+        return self._heuristic + self._cost  # TODO Restore this
 
     def get_cost(self) -> float:
         return self._cost
@@ -42,3 +42,6 @@ class Node:
 
     def __lt__(self, other: 'Node') -> bool:
         return self.get_f() < other.get_f()
+
+    def __str__(self):
+        return f"code: {self._code}, f {self.get_f()} and state: {self._state}"
