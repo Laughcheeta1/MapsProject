@@ -60,15 +60,16 @@ class Map:
         if self._create_gif:
             # Re-place the main nodes, so they are not overshadowed by the common nodes
             self._image_manager.graph_main_nodes(self._root.get_state(), self._goal_state_coordinates)
-            self._image_manager.create_gif()
 
         if not self._final_node:
+            if self._create_gif:
+                self._image_manager.create_gif()  # Create the gif without the path
             return list()
 
         self._path_objective()
 
         if self._create_gif:
-            self._image_manager.plot_graph_route(self._solution)
+            self._image_manager.create_gif(True, self._solution)  # Create the gif with the path
 
         return self._solution
 
