@@ -42,5 +42,5 @@ class Manager:
     """
     Returns the great circle distance between two coordinates
     """
-    def get_circle_distance(self, x1, y1, x2, y2):
-        return osd.euclidean(x1, y1, x2, y2)
+    def get_distance_nodes(self, x1, y1, x2, y2):
+        return osd.great_circle(x1, y1, x2, y2)
