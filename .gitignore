@@ -1,3 +1,7 @@
 venv
 .idea
 __pycache__/
+cache/
+test.ipynb
+visited.csv
+yes.py

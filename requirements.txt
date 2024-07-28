@@ -10,3 +10,4 @@ networkx
 osmnx
 geopy
 matplotlib
+imageio

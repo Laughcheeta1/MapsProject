@@ -1,5 +1,5 @@
-from Map_node import Node
-from NetworkManager import Manager
+from Map_Node import Node
+from Network_Manager import Manager
 import networkx
 
 
