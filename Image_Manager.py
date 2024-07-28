@@ -22,11 +22,17 @@ class Image_Manager:
         # This is were the nodes will be coloured
         self._fig, self._ax = ox.plot_graph(desired_map, figsize=(25, 25), show=False, close=False)
 
-    def create_gif(self):
+    def create_gif(self, with_path=False, route: list[int]=None):
         with io.get_writer(f"{self._path}/animation.gif", mode='I', duration=1 / self._fps) as writer:
             for filename in self._filenames:
                 image = io.imread(filename)
                 writer.append_data(image)
+            
+            if with_path:
+                self.plot_graph_route()
+                image = io.imread(f"{self._path}/finalpath.png")
+                for _ in range(120):  # 4 seconds
+                    writer.append_data(image)
 
         # for filename in filenames:
         #     os.remove(filename)
@@ -57,4 +63,4 @@ class Image_Manager:
             bgcolor=bgcolor,
             figsize=figsize
         )
-        plt.savefig(self._path)
+        plt.savefig(f"{self._path}/finalpath.png")
