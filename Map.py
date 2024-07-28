@@ -1,5 +1,7 @@
 from Map_Node import Node
 from Network_Manager import Manager
+from Image_Manager import Image_Manager
+
 import networkx
 
 
@@ -7,13 +9,18 @@ class Map:
     def __init__(self,
                  initial_state: dict[str, float],
                  goal_state: dict[str, float],
-                 desired_map: networkx.MultiDiGraph
+                 desired_map: networkx.MultiDiGraph,
+                 fps=30,
+                 create_gif=False
                  ):
         self.visited_print: set[int] = set()
 
         self._manager = Manager(desired_map)
+        if create_gif:
+            self._image_manager = Image_Manager("frames", "Final_Products", desired_map, fps)
 
         self._map = desired_map
+        self._create_gif = create_gif
 
         """
         Since the coordinates of the nearest node to the goal state and the goal state 
@@ -29,6 +36,10 @@ class Map:
             state=initial_state,
             heuristic=self._calculate_heuristic(initial_state)
         )
+
+        # Remember that the initial_state and goal_state are different from the actual nodes
+        if create_gif:
+            self._image_manager.graph_main_nodes(self._root.get_state(), self._goal_state_coordinates)
 
         """
         Not using a priority queue, since it is not iterable nor
@@ -46,10 +57,19 @@ class Map:
         self._final_node = None
 
     def get_solution(self) -> list[Node]:
+        if self._create_gif:
+            # Re-place the main nodes, so they are not overshadowed by the common nodes
+            self._image_manager.graph_main_nodes(self._root.get_state(), self._goal_state_coordinates)
+            self._image_manager.create_gif()
+
         if not self._final_node:
             return list()
 
         self._path_objective()
+
+        if self._create_gif:
+            self._image_manager.plot_graph_route(self._solution)
+
         return self._solution
 
     """
@@ -65,6 +85,8 @@ class Map:
             self._add_children(current_node)
 
             self.visited_print.add(current_node.get_code())
+            if self._create_gif:
+                self._image_manager.graph_new_common_node(current_node.get_state())
             counter += 1
 
         print(counter)
