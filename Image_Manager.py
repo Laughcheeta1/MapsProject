@@ -30,9 +30,23 @@ class Image_Manager:
                 writer.append_data(image)
             
             if with_path:
+                # TODO: Create the gif with the path
+                print("Entered to create the gif with the path")
                 self.plot_graph_route(route)
+
+                final_path = f"{self._path}/finalpath.png"
+
+                i = 0
+                while not os.path.exists(final_path):
+                    time.sleep(0.05)  # Sleep for 50ms
+                    i += 1
+                    if i == 100:
+                        print("The final image was not created")
+                        break
+
                 image = io.imread(f"{self._path}/finalpath.png")
                 for _ in range(120):  # 4 seconds
+                    print("Entered path to the gif")
                     writer.append_data(image)
 
         for filename in self._filenames:

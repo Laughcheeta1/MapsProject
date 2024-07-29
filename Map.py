@@ -71,9 +71,9 @@ class Map:
 
         if self._create_gif:
             self._image_manager.create_gif(True, self._solution)  # Create the gif with the path
-
-        # Always save the final path found
-        self._image_manager.plot_graph_route(self._solution)
+        else:
+            # Always save the final path found
+            self._image_manager.plot_graph_route(self._solution)
 
         return self._solution
 
