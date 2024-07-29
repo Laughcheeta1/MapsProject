@@ -1,6 +1,7 @@
 from Map_Node import Node
 from Network_Manager import Manager
 from Image_Manager import Image_Manager
+import osmnx
 
 import networkx
 
@@ -9,17 +10,17 @@ class Map:
     def __init__(self,
                  initial_state: dict[str, float],
                  goal_state: dict[str, float],
-                 desired_map: networkx.MultiDiGraph,
+                 desired_map: str,
                  fps=30,
                  create_gif=False
                  ):
+        self._map = osmnx.graph_from_place(desired_map, network_type='drive', simplify=False)
+
         self.visited_print: set[int] = set()
 
-        self._manager = Manager(desired_map)
-        if create_gif:
-            self._image_manager = Image_Manager("frames", "Final_Products", desired_map, fps)
+        self._manager = Manager(self._map)
+        self._image_manager = Image_Manager("frames", "Final_Products", desired_map, fps)
 
-        self._map = desired_map
         self._create_gif = create_gif
 
         """
@@ -71,6 +72,9 @@ class Map:
         if self._create_gif:
             self._image_manager.create_gif(True, self._solution)  # Create the gif with the path
 
+        # Always save the final path found
+        self._image_manager.plot_graph_route(self._solution)
+
         return self._solution
 
     """
@@ -90,8 +94,11 @@ class Map:
                 self._image_manager.graph_new_common_node(current_node.get_state())
             counter += 1
 
-        print(counter)
+        print(f"Visited {counter} nodes.")
         
+        # if self._create_gif:
+        #     self._image_manager.finish_plot()
+
         if self._is_goal(current_node):
             self._final_node = current_node
             return True
