@@ -2,6 +2,7 @@ from Map_Node import Node
 from Network_Manager import Manager
 from Image_Manager import Image_Manager
 import osmnx
+import time
 
 import networkx
 
@@ -82,6 +83,8 @@ class Map:
     returns True if it found a path, else, False
     """
     def search_path(self) -> bool:
+        start = time.time()
+
         current_node = None
         counter = 1
         while not self._is_goal(current_node) and len(self._frontier) != 0:
@@ -96,9 +99,11 @@ class Map:
 
         print(f"Visited {counter} nodes.")
         
-        # if self._create_gif:
-        #     self._image_manager.finish_plot()
+        if self._create_gif:
+            self._image_manager.finish_plot()
 
+        end = time.time()
+        print(f"Search took: {end - start} seconds")
         if self._is_goal(current_node):
             self._final_node = current_node
             return True
