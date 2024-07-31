@@ -17,7 +17,7 @@ end = {
     "y": 34.18071555750413
 }
 
-map_solver = Map(start, end, place_name, create_gif=True)
+map_solver = Map(start, end, place_name, create_gif=False)
 
 print("Mapper created")
 
