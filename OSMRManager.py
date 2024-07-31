@@ -2,9 +2,10 @@ import requests
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
 
 class OSRMManager:
-    def __init__(self, base_url: str = os.load_dotenv("API_URL")):
+    def __init__(self, base_url: str = os.getenv("API_URL")):
         self.base_url = base_url
 
     def get_average_speed(self, start_coords: tuple[float, float], end_coords: tuple[float, float]) -> float:

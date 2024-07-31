@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 
 from Map import Map
 
+load_dotenv()
+
 
 DESIRED_MAP = os.getenv("DESIRED_MAP")
 START_COORDINATES = os.getenv("START_COORDINATES").split(" ")
 END_COORDINATES = os.getenv("END_COORDINATES").split(" ")
 
-
-print("Finished charging map")
 start = {
     "x":START_COORDINATES[0] ,  # Cerca de la Universidad del Sur de California (USC)
     "y": START_COORDINATES[1]
