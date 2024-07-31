@@ -11,6 +11,8 @@ class Image_Manager:
     The desired_map is the map of the place.
     """
     def __init__(self, frames_path: str, save_path: str, desired_map: str, fps=30):
+        # For one reason or another, when passing the graph, it becomes unable to execute the 
+        # osmnx.plot_graph_route(), so we have to query it once again.
         self._map = ox.graph_from_place(desired_map, network_type='drive', simplify=False)
 
         self._frames_path = frames_path
