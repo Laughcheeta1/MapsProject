@@ -11,3 +11,4 @@ osmnx
 geopy
 matplotlib
 imageio
+dotenv
