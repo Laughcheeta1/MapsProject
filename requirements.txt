@@ -12,3 +12,4 @@ geopy
 matplotlib
 imageio
 dotenv
+scikit-learn

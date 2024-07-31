@@ -2,6 +2,7 @@ from Map_Node import Node
 from Network_Manager import Manager
 from Image_Manager import Image_Manager
 from OSMRManager import OSRMManager
+
 import osmnx
 import time
 
@@ -18,6 +19,7 @@ class Map:
                  ):
         self._osrm_manager = OSRMManager()
         self._map = osmnx.graph_from_place(desired_map, network_type='drive', simplify=False)
+
         self.visited_print: set[int] = set()
 
         self._manager = Manager(self._map)
