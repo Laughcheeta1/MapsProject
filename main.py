@@ -1,23 +1,30 @@
 import osmnx as ox
 import networkx as nx
 import matplotlib.pyplot as plt
+import os
+from dotenv import load_dotenv
+
 from Map import Map
 
 
-place_name = "Los Angeles, California, USA"
+DESIRED_MAP = os.getenv("DESIRED_MAP")
+START_COORDINATES = os.getenv("START_COORDINATES").split(" ")
+END_COORDINATES = os.getenv("END_COORDINATES").split(" ")
+
 
 print("Finished charging map")
 start = {
-    "x": -118.28370394467963,  # Cabrillo beach LA
-    "y": 33.71031030523406
+    "x":START_COORDINATES[0] ,  # Cerca de la Universidad del Sur de California (USC)
+    "y": START_COORDINATES[1]
 }
 
 end = {
-    "x": -118.64884798691931,  # Woodland hills LA
-    "y": 34.18071555750413
+    "x": END_COORDINATES[0],  # Cerca del Museo de Historia Natural del Condado de Los Ángeles
+    "y": END_COORDINATES[1]
 }
 
-map_solver = Map(start, end, place_name, create_gif=False)
+
+map_solver = Map(start, end, DESIRED_MAP, create_gif=False)
 
 print("Mapper created")
 

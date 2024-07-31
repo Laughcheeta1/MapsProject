@@ -5,3 +5,4 @@ cache/
 test.ipynb
 visited.csv
 yes.py
+.env

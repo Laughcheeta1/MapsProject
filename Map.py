@@ -1,6 +1,8 @@
 from Map_Node import Node
 from Network_Manager import Manager
 from Image_Manager import Image_Manager
+from OSMRManager import OSRMManager
+
 import osmnx
 import time
 
@@ -15,6 +17,7 @@ class Map:
                  fps=30,
                  create_gif=False
                  ):
+        self._osrm_manager = OSRMManager()
         self._map = osmnx.graph_from_place(desired_map, network_type='drive', simplify=False)
 
         self.visited_print: set[int] = set()
@@ -57,6 +60,7 @@ class Map:
         # The variables where we will input the solutions
         self._solution = None
         self._final_node = None
+
 
     def get_solution(self) -> list[Node]:
         if self._create_gif:
@@ -122,13 +126,25 @@ class Map:
 
             coordinates = self._manager.get_coordinates(neighbour)  # Get the neighbour coordinates
 
+            try:
+                # Coordenadas para hallar velocidad y maniobras
+                start_coords = (node.get_state()["y"], node.get_state()["x"])
+                end_coords = (coordinates["y"], coordinates["x"])
+                average_speed = self._osrm_manager.get_average_speed(start_coords, end_coords)
+                num_maneuvers = self._osrm_manager.get_num_maneuvers(start_coords, end_coords)
+            except Exception as e:
+                print(f"Error getting route data: {e}")
+                continue
+
             new_node = Node(  # Create the node for the neighbour
                             code=neighbour,
                             state=coordinates,
                             heuristic=self._calculate_heuristic(coordinates),
                             cost=self._calculate_cost(
                                 parent=node,
-                                distance_traveled=self._manager.get_edge_distance(code, neighbour)
+                                distance_traveled=self._manager.get_edge_distance(code, neighbour),
+                                average_speed=average_speed,
+                                num_maneuvers=num_maneuvers
                             ),
                             parent=node
                         )
@@ -150,9 +166,9 @@ class Map:
             self._goal_state_coordinates["y"]
         )
 
-    def _calculate_cost(self, parent: Node, distance_traveled: float) -> float:
+    def _calculate_cost(self, parent: Node, distance_traveled: float, average_speed: float, num_maneuvers: int) -> float:
         # TODO: Implement a more complex calculation
-        return parent.get_cost() + distance_traveled
+        return parent.get_cost() + distance_traveled + average_speed + num_maneuvers
 
     """
     Returns the list of the nodes (nodes represented in just the codes, to be able to graph_it)
