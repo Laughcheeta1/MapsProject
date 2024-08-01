@@ -14,13 +14,13 @@ START_COORDINATES = os.getenv("START_COORDINATES").split(" ")
 END_COORDINATES = os.getenv("END_COORDINATES").split(" ")
 
 start = {
-    "x":START_COORDINATES[0] ,  # Cerca de la Universidad del Sur de California (USC)
-    "y": START_COORDINATES[1]
+    "x": float(START_COORDINATES[0]) ,  # Cerca de la Universidad del Sur de California (USC)
+    "y": float(START_COORDINATES[1])
 }
 
 end = {
-    "x": END_COORDINATES[0],  # Cerca del Museo de Historia Natural del Condado de Los Ángeles
-    "y": END_COORDINATES[1]
+    "x": float(END_COORDINATES[0]),  # Cerca del Museo de Historia Natural del Condado de Los Ángeles
+    "y": float(END_COORDINATES[1])
 }
 
 
