@@ -1,7 +1,5 @@
 ![Simple visualization of the A*](AStar_Algorithm.gif)
 
-![Example of the final Route](Final_Products/finalpath.png)
-
 # Best Route Searching
 
 This is a small project designed to search the best route to take on a city, for getting from one point to another.
