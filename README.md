@@ -1,4 +1,4 @@
-![Simple visualization of the A*](AStar_Algorithm.gif)
+<img alt="Simple visualization of A*" width="400" src="./AStar_Algorithm.gif">
 
 # Best Route Searching
 
